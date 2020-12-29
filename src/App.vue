@@ -4,6 +4,7 @@
       @handleSubmit="handleSubmit"
       :isSavedUrl="isSavedUrl"
       :currentUrl="url"
+      :findUrl="findUrl"
     ></router-view>
   </div>
 </template>
@@ -28,10 +29,11 @@ export default {
     handleSubmit(url, error) {
       this.isSavedUrl = false;
       this.url = { name: "", id: "" };
-      if (!error) {
+      const founded = this.findUrl(this.addhttp(url));
+      if (!error && !founded) {
         const url_id = this.generateRandomId(LIMIT_CHARACTERS);
         this.addToList({
-          name: url,
+          name: this.addhttp(url),
           id: url_id,
         });
         this.isSavedUrl = true;
@@ -55,6 +57,16 @@ export default {
     addToList(item) {
       this.listUrls = [...this.listUrls, item];
       localStorage.setItem("list-urls", JSON.stringify(this.listUrls));
+    },
+
+    addhttp(url) {
+      if (!/^(?:f|ht)tps?:\/\//.test(url)) {
+        url = "http://" + url;
+      }
+      return url;
+    },
+    findUrl(name) {
+      return this.listUrls.find((item) => item.name === this.addhttp(name));
     },
   },
 };
