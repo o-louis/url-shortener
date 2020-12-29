@@ -14,6 +14,9 @@ const LIMIT_CHARACTERS = 8;
 
 export default {
   name: "App",
+  mounted() {
+    this.listUrls = JSON.parse(localStorage.getItem("list-urls")) || [];
+  },
   data() {
     return {
       url: { name: "", id: "" },
@@ -28,8 +31,8 @@ export default {
       if (!error) {
         const url_id = this.generateRandomId(LIMIT_CHARACTERS);
         this.addToList({
-          url: url.name,
-          url_id,
+          name: url,
+          id: url_id,
         });
         this.isSavedUrl = true;
         this.url = {
@@ -51,6 +54,7 @@ export default {
 
     addToList(item) {
       this.listUrls = [...this.listUrls, item];
+      localStorage.setItem("list-urls", JSON.stringify(this.listUrls));
     },
   },
 };
