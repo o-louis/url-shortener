@@ -24,6 +24,10 @@
       Succeed !<br />Your shortened url is
       <span class="font-bold">{{ currentUrl.id }}</span>
     </p>
+    <p v-else-if="findUrlName" class="text-red-400">
+      This URL has already been shortened<br />
+      <span class="font-bold">{{ urlShortened }}</span>
+    </p>
   </div>
 </template>
 
@@ -33,11 +37,13 @@ export default {
   props: {
     isSavedUrl: Boolean,
     currentUrl: Object,
+    findUrl: Function,
   },
   data() {
     return {
       url: "",
       error: false,
+      findUrlName: null,
     };
   },
   methods: {
@@ -45,6 +51,7 @@ export default {
       this.error = false;
       if (!this.isUrlValid()) this.error = true;
       this.$emit("handleSubmit", this.url, this.error);
+      this.findUrlName = this.findUrl(this.url) || null;
       this.url = "";
     },
 
@@ -52,6 +59,11 @@ export default {
       const expression = /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
       const regex = new RegExp(expression);
       return this.url.match(regex) ? true : false;
+    },
+  },
+  computed: {
+    urlShortened() {
+      return `${window.location.href}${this.findUrlName.id}`;
     },
   },
 };
