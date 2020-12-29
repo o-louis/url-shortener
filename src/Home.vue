@@ -24,9 +24,14 @@
       Succeed !<br />Your shortened url is
       <span class="font-bold">{{ currentUrl.id }}</span>
     </p>
+    <p v-if="isSavedUrl" class="text-sm text-green-200 italic">
+      Long URL: {{ currentUrl.name }}
+    </p>
     <p v-else-if="findUrlName" class="text-red-400">
       This URL has already been shortened<br />
-      <span class="font-bold">{{ urlShortened }}</span>
+      <span class="font-bold">{{ urlShortened("id") }}</span>
+      <br />
+      <span class="italic text-sm">Long URL: {{ urlShortened("name") }}</span>
     </p>
   </div>
 </template>
@@ -60,10 +65,13 @@ export default {
       const regex = new RegExp(expression);
       return this.url.match(regex) ? true : false;
     },
-  },
-  computed: {
-    urlShortened() {
-      return `${window.location.href}${this.findUrlName.id}`;
+
+    urlShortened(key) {
+      key =
+        key == "id"
+          ? `${window.location.href}${this.findUrlName[key]}`
+          : this.findUrlName[key];
+      return key;
     },
   },
 };
