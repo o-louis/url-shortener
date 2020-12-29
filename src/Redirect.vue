@@ -13,19 +13,11 @@ export default {
     if (requestedUrl) {
       const url = listUrls.find((item) => item.id === requestedUrl);
       if (url?.name) {
-        window.location.href = this.addhttp(url.name);
+        window.location.href = url.name;
       } else {
         this.$router.push("/");
       }
     }
-  },
-  methods: {
-    addhttp(url) {
-      if (!/^(?:f|ht)tps?:\/\//.test(url)) {
-        url = "http://" + url;
-      }
-      return url;
-    },
   },
 };
 </script>
