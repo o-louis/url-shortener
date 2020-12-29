@@ -36,11 +36,11 @@ export default {
           name: this.addhttp(url),
           id: url_id,
         });
-        this.isSavedUrl = true;
         this.url = {
-          name: url,
+          name: this.addhttp(url),
           id: `${window.location.href}${url_id}`,
         };
+        this.isSavedUrl = true;
       }
     },
 
